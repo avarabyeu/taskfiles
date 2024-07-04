@@ -5,8 +5,6 @@ env:
   GOTESTSUM_VERSION: v1.11.0
 
 vars:
-  MODULE:
-    sh: go list
   GOFILES_NOVENDOR:
     sh: find . -type f -name '*.go' -not -path "./vendor/*"
   COMMIT_HASH:
@@ -39,6 +37,9 @@ tasks:
 
   fmt:
     desc: "Formats the code. Uses gofumpt,goimports,tagalign,gci"
+    vars:
+      MODULE:
+        sh: go list
     preconditions:
       - gofumpt -version
       - gci -v
