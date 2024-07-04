@@ -5,13 +5,10 @@ env:
   GOTESTSUM_VERSION: v1.11.0
 
 vars:
-  GOFILES_NOVENDOR:
-    sh: find . -type f -name '*.go' -not -path "./vendor/*"
   COMMIT_HASH:
     sh: git rev-parse --short HEAD 2>/dev/null
   BUILD_DATE:
     sh: date +%FT%T%z
-  BUILD_INFO_LDFLAGS: -ldflags "-w -extldflags '"-static"' -X main.buildDate={{.BUILD_DATE}} -X main.version={{.COMMIT_HASH}}"
 
 
 tasks:
@@ -56,6 +53,8 @@ tasks:
 
   build:
     desc: "Builds an application. Use $BUILD_INFO_LDFLAGS, $APP_NAME variables"
+    vars:
+      BUILD_INFO_LDFLAGS: -ldflags "-w -extldflags '"-static"' -X main.buildDate={{.BUILD_DATE}} -X main.version={{.COMMIT_HASH}}"
     cmds: ["go build {{.BUILD_INFO_LDFLAGS}} -o bin/${APP_NAME} ./${APP_NAME}"]
 
   test:
